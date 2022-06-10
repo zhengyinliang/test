@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.mapper.CourseMapper">
+    <insert id="addCourse" parameterType="Course">
+        insert into db_student_manage.course (id, course_name, credit)
+        values (#{id},#{courseName},#{credit})
+    </insert>
+
+    <delete id="deleteCourseById" parameterType="int">
+        delete db_student_manage.course.*
+        from db_student_manage.course
+        where Not EXISTS(
+                select cs.c_id
+                from db_student_manage.course_to_student as cs
+                where cs.c_id = course.id
+            )
+          and course.id= #{id};
+    </delete>
+
+    <update id="updateCourse" parameterType="Course">
+        update db_student_manage.course set id=#{id},course_name=#{courseName},credit= #{credit} where id = #{id}
+    </update>
+
+    <select id="selectCourseById" parameterType="int" resultType="Course">
+        select * from db_student_manage.course where course.id =#{id}
+    </select>
+
+    <select id="searchCourseByCondition" parameterType="map" resultType="Course">
+        select id, course_name as courseName, credit from db_student_manage.course as dbc
+        where dbc.course_name like concat('%',#{course_name},'%')
+        limit #{startIndex},#{pageSize}
+    </select>
+
+</mapper>

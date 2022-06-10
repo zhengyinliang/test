@@ -1,0 +1,23 @@
+#配置数据源
+spring:
+  datasource:
+    #如果使用高版本驱动 则添加cj
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_student_manage?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+
+#Spring整合Mybatis
+mybatis:
+  #定义别名包
+  type-aliases-package: com.liang.pojo
+  #导入映射文件(指定映射文件的路径)
+  mapper-locations: classpath:/mappers/*.xml
+  #开启驼峰映射
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #打印日志
+  logging:
+    level:
+      com.liang.mapper: debug

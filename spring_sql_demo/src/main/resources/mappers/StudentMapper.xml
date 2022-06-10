@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.mapper.StudentMapper">
+    <!--查询所有数据-->
+    <select id="getAllStudents" resultType="Student">
+        select id, stud_name as studName, sex, grade from db_student_manage.student
+    </select>
+
+    <select id="selectById" resultType="Student">
+        select id, stud_name as studName, sex, grade from db_student_manage.student where id=#{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="map" resultType="Student">
+        select id, stud_name as studName, sex, grade from db_student_manage.student as dbs
+        where dbs.stud_name like concat('%',#{stud_name},'%')  and sex = #{sex} and grade = #{grade}
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <insert id="addStudent" parameterType="Student">
+        insert into db_student_manage.student (id, stud_name, sex, grade)
+        values (#{id},#{studName},#{sex},#{grade})
+    </insert>
+
+    <delete id="deleteStudentById" parameterType="int">
+        delete db_student_manage.student.*, cs.*
+        from db_student_manage.student
+                 left join db_student_manage.course_to_student as cs on student.id= cs.s_id
+        where student.id=#{id}
+    </delete>
+
+    <update id="updateStudent" parameterType="Student">
+        update db_student_manage.student set id=#{id},stud_name=#{studName},sex=#{sex}, grade = #{grade} where id = #{id}
+    </update>
+
+</mapper>
